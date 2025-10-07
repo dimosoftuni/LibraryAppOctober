@@ -21,6 +21,9 @@ jobs:
         cache: 'npm'
     - name: Install package.json dependencies
       run: npm install
+    - name: Manually update the config.js file
+      run: |
+        echo "export const settings = { host: 'http://localhost:3030' };" > src/config.js
     - name: Start Backend
       run: npm run start-be &
     - name: Start Frontend
