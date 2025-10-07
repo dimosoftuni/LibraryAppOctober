@@ -32,3 +32,29 @@ jobs:
       run: npx playwright install
     - name: Execute Playwright UI tests
       run: npm run test
+
+  deploy-be:
+    runs-on: ubuntu-latest
+    needs: build_test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.4.5
+        with:
+          service_id: ${{ secrets.MY_RENDER_BE_SERVICE_ID }}
+          api_key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait_deploy: true
+
+  deploy-fe:
+    runs-on: ubuntu-latest
+    needs: deploy-be
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Deploy to Render
+        uses: JorgeLNJunior/render-deploy@v1.4.5
+        with:
+          service_id: ${{ secrets.MY_RENDER_FE_SERVICE_ID }}
+          api_key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait_deploy: true
